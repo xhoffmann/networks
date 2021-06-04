@@ -16,6 +16,7 @@ def breadth_first(*, adjacency):
 	Returns:
 		True (single component) or False (2 or more components).
 	"""
+	# create linking dictionary
 	links = defaultdict(list)
 	for el in adjacency:
 		links[el[0]].append(el[1])
@@ -30,9 +31,13 @@ def breadth_first(*, adjacency):
 		burned.update({seed})
 		while pocket:
 			seed = pocket.pop()
+			# all neighbors
 			new_list = set(links[seed])
+			# only newly burned
 			new_list = new_list.difference(burned)
+			# add newly burned to total burned
 			burned.update(new_list)
+			# add newly burned to pocket
 			pocket = [*pocket, *new_list]
 		nodes = nodes.difference(burned)
 	if num_clus == 1:
