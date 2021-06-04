@@ -5,10 +5,14 @@
 
 import copy
 import random
+from typing import List, Sequence, Tuple
+
 from scipy import special as sp_special
 
 
-def configuration_model(*, degrees, max_trials=10, max_fails=1000):
+def configuration_model(
+    *, degrees: Sequence[int], max_trials: int = 10, max_fails: int = 1000
+) -> List[Tuple[int, int]]:
     """Configuration model from degree list.
 
     Generates simple graph: no self-loops nor multiedges.
@@ -63,7 +67,9 @@ def configuration_model(*, degrees, max_trials=10, max_fails=1000):
     return []
 
 
-def sample_powerlaw_with_natural_cutoff(*, gamma, nodes, k_min=2):
+def sample_powerlaw_with_natural_cutoff(
+    *, gamma: float, nodes: int, k_min: int = 2
+) -> List[int]:
     """Sample degrees from a powerlaw with natural cutoff.
 
     Args:
