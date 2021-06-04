@@ -25,7 +25,7 @@ repos:
 #  rev: 5.0.2  # pick a git hash / tag to point to
 #  hooks:
 #  - id: pydocstyle
-- repo: https://gitlab.com/pycqa/flake8
-  rev: "3.7.9"  # pick a git hash / tag to point to
-  hooks:
-  - id: flake8
+#- repo: https://gitlab.com/pycqa/flake8
+#  rev: "3.7.9"  # pick a git hash / tag to point to
+#  hooks:
+#  - id: flake8
