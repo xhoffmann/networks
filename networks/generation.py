@@ -8,7 +8,9 @@ import random
 
 
 def configuration_model(*, degrees, max_trials=10, max_fails=1000):
-    """
+    """Configuration model from degree list.
+
+    Generates simple graph: no self-loops nor multiedges.
 
     Args:
         degrees: Degree list.
@@ -16,18 +18,18 @@ def configuration_model(*, degrees, max_trials=10, max_fails=1000):
         max_fails: Max number of fails (not added pair) in a trial.
 
     Returns:
-
+        adjacency: Adjacency list with tuples of pairs (n1, n2), with
+            n1 < n2.
 
     Raises:
         ValueError: If the sum of degrees is uneven.
     """
-
-    """Configuration model from degree list."""
     # check if sum of stubs is even
     if sum(degrees) % 2 != 0:
         err = f"Sum of degrees ({sum(degrees)}) must be even."
         raise ValueError(err)
 
+    # backup stubs and edges
     stubs_bu = []
     edges_bu = {}
     for i, el in enumerate(degrees):
@@ -36,29 +38,25 @@ def configuration_model(*, degrees, max_trials=10, max_fails=1000):
         edges_bu[i] = []
 
     trials = 0
-    while trials < 0:
+    while trials < max_trials:
         stubs = copy.copy(stubs_bu)
         edges = copy.deepcopy(edges_bu)
+        fails = 0
         while stubs:
             n1 = random.choice(stubs)
             aux = stubs[:]
             aux.remove(n1)
             n2 = random.choice(aux)
-
-        #
-        # while stubs:
-        #     x1 = random.choice(stub_list)
-        #     aux = stub_list[:]
-        #     aux.remove(x1)
-        #     x2 = random.choice(aux)
-        #     if x1 != x2 and x2 not in edges[x1]:
-        #         edges[x1].append(x2)
-        #         edges[x2].append(x1)
-        #         stub_list.remove(x1)
-        #         stub_list.remove(x2)
-        #         trials = 0
-        #     else:
-        #         trials += 1
-        #         if trials > 1000:
-        #             success = 0
-        #             break
+            if n1 != n2 and n2 not in edges[n1]:
+                edges[n1].append(n2)
+                edges[n2].append(n1)
+                stubs.remove(n1)
+                stubs.remove(n2)
+            else:
+                fails += 1
+                if fails > max_fails:
+                    trials += 1
+                    break
+        adjacency = [(i, j) for i in edges for j in edges[i] if i < j]
+        return adjacency
+    return []
