@@ -5,6 +5,7 @@
 
 import copy
 import random
+from scipy import special as sp_special
 
 
 def configuration_model(*, degrees, max_trials=10, max_fails=1000):
@@ -60,3 +61,53 @@ def configuration_model(*, degrees, max_trials=10, max_fails=1000):
         adjacency = [(i, j) for i in edges for j in edges[i] if i < j]
         return adjacency
     return []
+
+
+def sample_powerlaw_with_natural_cutoff(*, gamma, nodes, k_min=2):
+    """Sample degrees from a powerlaw with natural cutoff.
+
+    Args:
+        gamma: Powerlaw exponent (larger than 2).
+        nodes: Total number of nodes.
+        k_min: Minimum degree.
+
+    Returns:
+        degrees: Degree sequence.
+
+    Raises:
+        ValueError: If exponent is smaller or equal than 2.
+        ValueError: If k_min is smaller than 1.
+    """
+
+    if gamma <= 2:
+        err = f"Exponent ({gamma}) should be larger than 2."
+        raise ValueError(err)
+    if k_min < 1:
+        err = f"Mimimum degree ({k_min}) should be larger than 0."
+
+    k0 = k_min
+    x0 = float(k0)
+    # compute natural cut-off
+    k_cut = int(x0 * nodes ** (1.0 / (gamma - 1.0)))
+    # compute normalization constant
+    norm_discrete = sp_special.zeta(gamma, k0) - sp_special.zeta(gamma, k_cut + 1)
+    norm_continuous = (gamma - 1.0) * x0 ** (gamma - 1.0)
+
+    def discrete(k):
+        return k ** (-gamma) / norm_discrete
+
+    def continuous(x):
+        return norm_continuous * x ** (-gamma)
+
+    degrees = []
+    count = 0
+    coef = discrete(k0) / continuous(x0 + 1)
+    while count < nodes:
+        u = random.random()
+        x = x0 * u ** (1.0 / (1.0 - gamma))
+        k = int(x)
+        if k <= k_cut and random.random() * coef * continuous(x) <= discrete(k):
+            degrees.append(k)
+            count += 1
+
+    return degrees
