@@ -16,6 +16,7 @@ def configuration_model(
     """Configuration model from degree list.
 
     Generates simple graph: no self-loops nor multiedges.
+    Returns empty list if not feasible.
 
     Args:
         degrees: Degree list.
@@ -117,3 +118,18 @@ def sample_powerlaw_with_natural_cutoff(
             count += 1
 
     return degrees
+
+
+def degree_random_regular_network(*, nodes, k, **kwargs) -> List[Tuple[int, int]]:
+    """Generate adjacency list for random degree-regular network.
+
+    Args:
+        nodes: Number of nodes.
+        k: Fixed degree.
+        **kwargs: Keyword arguments for function configuration_model.
+
+    Returns:
+        Adjacency list.
+    """
+    degrees = [k] * nodes
+    return configuration_model(degrees=degrees, **kwargs)
