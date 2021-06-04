@@ -123,6 +123,9 @@ def sample_powerlaw_with_natural_cutoff(
 def degree_random_regular_network(*, nodes, k, **kwargs) -> List[Tuple[int, int]]:
     """Generate adjacency list for random degree-regular network.
 
+    Generates simple graph: no self-loops nor multiedges.
+    Returns empty list if not feasible.
+
     Args:
         nodes: Number of nodes.
         k: Fixed degree.
@@ -133,3 +136,34 @@ def degree_random_regular_network(*, nodes, k, **kwargs) -> List[Tuple[int, int]
     """
     degrees = [k] * nodes
     return configuration_model(degrees=degrees, **kwargs)
+
+
+def scale_free_network(
+    *, nodes, gamma, k_min, max_random: int = 10, **kwargs
+) -> List[Tuple[int, int]]:
+    """Generate adjacency list for scale-free network.
+
+    Generates simple graph: no self-loops nor multiedges.
+    Returns empty list if not feasible.
+
+    Args:
+        nodes: Number of nodes.
+        gamma: Powerlaw exponent.
+        k_min: Minimum degree.
+        max_random: Maximum randomizations of degree sequence.
+        **kwargs:  Keyword arguments for function configuration_model.
+
+    Returns:
+        Adjacency list.
+    """
+    randomization = 0
+    while randomization < max_random:
+        degrees = sample_powerlaw_with_natural_cutoff(
+            gamma=gamma, nodes=nodes, k_min=k_min
+        )
+        adjacency = configuration_model(degrees=degrees, **kwargs)
+        if adjacency:
+            return adjacency
+        else:
+            randomization += 1
+    return []
