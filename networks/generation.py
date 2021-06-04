@@ -5,9 +5,9 @@
 
 import copy
 import random
-from typing import List, Sequence, Tuple
+from typing import List, Sequence, Tuple, Dict
 
-from scipy import special as sp_special
+from scipy import special as sp_special  # type: ignore
 
 
 def configuration_model(
@@ -37,7 +37,7 @@ def configuration_model(
 
     # backup stubs and edges
     stubs_bu = []
-    edges_bu = {}
+    edges_bu: Dict[int, List[int]] = {}
     for i, el in enumerate(degrees):
         aux = [i] * el
         stubs_bu += aux[:]
@@ -85,7 +85,6 @@ def sample_powerlaw_with_natural_cutoff(
         ValueError: If exponent is smaller or equal than 2.
         ValueError: If k_min is smaller than 1.
     """
-
     if gamma <= 2:
         err = f"Exponent ({gamma}) should be larger than 2."
         raise ValueError(err)
