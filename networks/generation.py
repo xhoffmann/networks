@@ -1,4 +1,4 @@
-"""Functions for generating synthetis networks.
+"""Functions for generating synthetic networks.
 
 2021, Xavier R. Hoffmann <xrhoffmann@gmail.com>
 """
