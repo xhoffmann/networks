@@ -15,7 +15,7 @@ def configuration_model(
 ) -> List[Tuple[int, int]]:
     """Configuration model from degree list.
 
-    Generates simple graph: no self-loops nor multiedges.
+    Generates undirected simple graph: no self-loops nor multiedges.
     Returns empty list if not feasible.
 
     Args:
@@ -122,7 +122,7 @@ def sample_powerlaw_with_natural_cutoff(
 def degree_random_regular_network(*, nodes, k, **kwargs) -> List[Tuple[int, int]]:
     """Generate adjacency list for random degree-regular network.
 
-    Generates simple graph: no self-loops nor multiedges.
+    Generates undirected simple graph: no self-loops nor multiedges.
     Returns empty list if not feasible.
 
     Args:
@@ -142,7 +142,7 @@ def scale_free_network(
 ) -> List[Tuple[int, int]]:
     """Generate adjacency list for scale-free network.
 
-    Generates simple graph: no self-loops nor multiedges.
+    Generates undirected simple graph: no self-loops nor multiedges.
     Returns empty list if not feasible.
 
     Args:
