@@ -5,7 +5,7 @@ Network generation and analysis.
 
 2021, Xavier R. Hoffmann <xrhoffmann@gmail.com>
 
-
+This repository is licensed under the MIT License.
 
 ## `generation`
 
